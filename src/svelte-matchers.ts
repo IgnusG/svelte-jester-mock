@@ -1,7 +1,30 @@
+type SvelteProps = { props: { [key: string]: any }};
+
+export declare namespace jest {
+  interface Matchers<R, T> {
+    /**
+     * @description
+     * Assert whether a svelte component has the specified prop (compares as .toEqual(...)).
+     * @example
+     * <Component value={15}/>
+     *
+     * expect(ComponentMock).toHaveSvelteProp('value', 15)
+     */
+    toHaveSvelteProp(propName: string, propValue: any): R;
+    /**
+     * @description
+     * Assert whether a svelte component has all the provided props (compares as .toEqual(expect.objectContaining({ ... }))).
+     * @example
+     * <Component value={15} text="Hello" color="blue"/>
+     *
+     * expect(ComponentMock).toHaveSvelteProps({ value: 15, text: "Hello" })
+     */
+    toHaveSvelteProps(expectedProps: SvelteProps['props']): R;
+  }
+}
+
 import diff from 'jest-diff';
 import type { MockedComponent } from './svelte-mock-factory';
-
-type SvelteProps = { props: { [key: string]: any }};
 
 const collapseSvelteProps = (component: MockedComponent): SvelteProps['props'] => {
   const lastCall = component.mock.calls.length - 1;
