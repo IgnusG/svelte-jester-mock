@@ -11,10 +11,9 @@ export interface MockedComponent extends jest.Mock {
  * jest.mock('my-component/path', mockComponent(require('mocks/component.svelte'));
  *
  * import Component from 'my-component/path';
- * const componentMock = Component.default as MockedComponent;
  * ...
  *
- * expect(componentMock).toHaveSvelteProp('value', 123);
+ * expect(Component).toHaveSvelteProp('value', 123);
  */
 export function mockComponent(component: SvelteComponent): {
 	['default']: MockedComponent

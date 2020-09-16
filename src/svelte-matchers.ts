@@ -1,30 +1,36 @@
 type SvelteProps = { props: { [key: string]: any }};
 
-export declare namespace jest {
-  interface Matchers<R, T> {
-    /**
-     * @description
-     * Assert whether a svelte component has the specified prop (compares as .toEqual(...)).
-     * @example
-     * <Component value={15}/>
-     *
-     * expect(ComponentMock).toHaveSvelteProp('value', 15)
-     */
-    toHaveSvelteProp(propName: string, propValue: any): R;
-    /**
-     * @description
-     * Assert whether a svelte component has all the provided props (compares as .toEqual(expect.objectContaining({ ... }))).
-     * @example
-     * <Component value={15} text="Hello" color="blue"/>
-     *
-     * expect(ComponentMock).toHaveSvelteProps({ value: 15, text: "Hello" })
-     */
-    toHaveSvelteProps(expectedProps: SvelteProps['props']): R;
+declare global {
+  namespace jest {
+    interface Matchers<R, T> {
+      /**
+       * @description
+       * Assert whether a svelte component has the specified prop (compares as .toEqual(...)).
+       * @example
+       * <Component value={15}/>
+       *
+       * expect(ComponentMock).toHaveSvelteProp('value', 15)
+       */
+      toHaveSvelteProp(propName: string, propValue: any): R;
+      /**
+       * @description
+       * Assert whether a svelte component has all the provided props (compares as .toEqual(expect.objectContaining({ ... }))).
+       * @example
+       * <Component value={15} text="Hello" color="blue"/>
+       *
+       * expect(ComponentMock).toHaveSvelteProps({ value: 15, text: "Hello" })
+       */
+      toHaveSvelteProps(expectedProps: SvelteProps['props']): R;
+    }
   }
 }
 
 import diff from 'jest-diff';
 import type { MockedComponent } from './svelte-mock-factory';
+
+interface WrappedMockedComponent {
+  default: MockedComponent;
+}
 
 const collapseSvelteProps = (component: MockedComponent): SvelteProps['props'] => {
   const lastCall = component.mock.calls.length - 1;
@@ -36,9 +42,11 @@ const collapseSvelteProps = (component: MockedComponent): SvelteProps['props'] =
   }), initialProps.props);
 }
 
+const isWrapped = (component: WrappedMockedComponent | MockedComponent): component is WrappedMockedComponent => (component as WrappedMockedComponent)?.default !== undefined;
+
 expect.extend({
-  toHaveSvelteProp(component: MockedComponent, propName: string, propValue: any) {
-    const props = collapseSvelteProps(component);
+  toHaveSvelteProp(component: WrappedMockedComponent, propName: string, propValue: any) {
+    const props = collapseSvelteProps(isWrapped(component) ? component.default : component);
 
     const prop = props[propName];
 
@@ -64,7 +72,8 @@ expect.extend({
     return { actual: props, message, pass };
   },
   toHaveSvelteProps(component: MockedComponent, expectedProps: SvelteProps['props']) {
-    const props = collapseSvelteProps(component);
+    const props = collapseSvelteProps(isWrapped(component) ? component.default : component);
+
     const expectedPropEntries = Object.entries(expectedProps);
     const expectedPropKeys = expectedPropEntries.map(([key]) => key);
 
