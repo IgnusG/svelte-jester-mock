@@ -8,7 +8,7 @@
     "prepare": "npm run build"
   },
   "author": "IgnusG",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^26.0.14",
     "svelte": "^3.25.1",
