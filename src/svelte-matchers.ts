@@ -26,11 +26,7 @@ declare global {
 }
 
 import diff from 'jest-diff';
-import type { MockedComponent } from './svelte-mock-factory';
-
-interface WrappedMockedComponent {
-  default: MockedComponent;
-}
+import type { MockedComponent, WrappedMockedComponent } from './svelte-mock-factory';
 
 const collapseSvelteProps = (component: MockedComponent): SvelteProps['props'] => {
   const lastCall = component.mock.calls.length - 1;

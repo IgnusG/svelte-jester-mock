@@ -4,6 +4,10 @@ export interface MockedComponent extends jest.Mock {
   $set$spy: jest.Mock;
 }
 
+export interface WrappedMockedComponent {
+  default: MockedComponent;
+}
+
 /**
  * @description
  * Creates a mocked svelte component which can then be imported like normal and used with matchers provided by svelte-jester-mock
@@ -15,9 +19,7 @@ export interface MockedComponent extends jest.Mock {
  *
  * expect(Component).toHaveSvelteProp('value', 123);
  */
-export function mockComponent(component: SvelteComponent): {
-	['default']: MockedComponent
-} {
+export function mockComponent(component: SvelteComponent): WrappedMockedComponent {
 	const setSpy = jest.fn();
 
   const mockComponent = jest.fn(function(...args) {
