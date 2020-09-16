@@ -3,6 +3,13 @@
   "version": "1.0.1",
   "description": "A VERY \"simple\"/primitive mock system and jest matchers for svelte-jester",
   "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ignusg/svelte-jester-mock"
+  },
+  "bugs": {
+    "url": "https://github.com/ignusg/svelte-jester-mock/issues"
+  },
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build"
