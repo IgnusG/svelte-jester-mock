@@ -1,6 +1,6 @@
 {
   "name": "svelte-jester-mock",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A VERY \"simple\"/primitive mock system and jest matchers for svelte-jester",
   "main": "dist/index.js",
   "scripts": {
