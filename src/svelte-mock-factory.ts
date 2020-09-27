@@ -1,4 +1,4 @@
-import type { SvelteComponent } from 'svelte/internal';
+import type { SvelteComponent, SvelteComponentDev } from 'svelte/internal';
 
 export interface MockedComponent extends jest.Mock {
   $set$spy: jest.Mock;
@@ -19,7 +19,7 @@ export interface WrappedMockedComponent {
  *
  * expect(Component).toHaveSvelteProp('value', 123);
  */
-export function mockComponent(component: SvelteComponent): WrappedMockedComponent {
+export function mockComponent(component: SvelteComponent | typeof SvelteComponentDev): WrappedMockedComponent {
 	const setSpy = jest.fn();
 
   const mockComponent = jest.fn(function(...args) {
